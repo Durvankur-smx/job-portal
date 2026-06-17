@@ -1,0 +1,17 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main class="container">
+  <% if (!job) { %>
+    <h1>Job Not Found</h1>
+    <p>The requested job does not exist.</p>
+  <% } else { %>
+    <h1><%= job.title %></h1>
+    <p><strong>Company:</strong> <%= job.company %></p>
+    <p><strong>Location:</strong> <%= job.location %></p>
+    <p><strong>Salary:</strong> <%= job.salary %></p>
+    <p><%= job.description %></p>
+  <% } %>
+</main>
+
+<%- include('../partials/footer') %>

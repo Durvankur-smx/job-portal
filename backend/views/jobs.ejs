@@ -1,0 +1,31 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<main class="container">
+  <section>
+    <h1>Available Jobs</h1>
+    <a class="button" href="/jobs/add">Add Job</a>
+
+    <% if (success) { %>
+      <p class="alert success"><%= success %></p>
+    <% } %>
+
+    <% if (jobs.length) { %>
+      <div class="grid">
+        <% jobs.forEach((job) => { %>
+          <article class="card">
+            <h2><%= job.title %></h2>
+            <p><strong>Company:</strong> <%= job.company %></p>
+            <p><strong>Location:</strong> <%= job.location || 'Not specified' %></p>
+            <p><strong>Salary:</strong> <%= job.salary ? '$' + Number(job.salary).toLocaleString() : 'Not disclosed' %></p>
+            <a class="button" href="/jobs/<%= job.id %>">View Details</a>
+          </article>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p>No jobs found.</p>
+    <% } %>
+  </section>
+</main>
+
+<%- include('partials/footer') %>

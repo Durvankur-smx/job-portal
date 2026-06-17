@@ -1,0 +1,20 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main class="container">
+  <h1>Available Jobs</h1>
+  <% if (jobs.length === 0) { %>
+    <p>No jobs found.</p>
+  <% } %>
+  <div class="grid">
+    <% jobs.forEach((job) => { %>
+      <article class="card">
+        <h2><%= job.title %></h2>
+        <p><%= job.company %> - <%= job.location %></p>
+        <a href="/jobs/<%= job.id %>">View Details</a>
+      </article>
+    <% }) %>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

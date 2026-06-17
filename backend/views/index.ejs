@@ -1,0 +1,31 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<main class="container">
+  <section class="hero">
+    <h1>Job Portal</h1>
+    <p>Find opportunities from growing companies and apply for the roles that fit your next move.</p>
+    <a class="button" href="/jobs">Browse Jobs</a>
+  </section>
+
+  <section>
+    <h2>Latest Jobs</h2>
+
+    <% if (jobs.length) { %>
+      <div class="grid">
+        <% jobs.forEach((job) => { %>
+          <article class="card">
+            <h3><%= job.title %></h3>
+            <p><strong>Company:</strong> <%= job.company %></p>
+            <p><strong>Location:</strong> <%= job.location || 'Not specified' %></p>
+            <a class="button" href="/jobs/<%= job.id %>">View Details</a>
+          </article>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p>No jobs are available right now.</p>
+    <% } %>
+  </section>
+</main>
+
+<%- include('partials/footer') %>

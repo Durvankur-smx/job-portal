@@ -1,0 +1,28 @@
+{
+  "name": "job-portal-management-system-backend",
+  "version": "1.0.0",
+  "description": "Express, MySQL, and EJS backend for a Job Portal Management System.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [
+    "job-portal",
+    "express",
+    "mysql",
+    "ejs",
+    "mvc"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.22.1",
+    "mysql2": "^3.22.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

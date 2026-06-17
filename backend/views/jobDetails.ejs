@@ -1,0 +1,16 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<main class="container">
+  <article class="card">
+    <h1><%= job.title %></h1>
+    <p><strong>Created:</strong> <%= createdDate %></p>
+
+    <h2>Description</h2>
+    <p><%= job.description || 'No description provided.' %></p>
+
+    <a class="button" href="/jobs">Back to Jobs</a>
+  </article>
+</main>
+
+<%- include('partials/footer') %>
