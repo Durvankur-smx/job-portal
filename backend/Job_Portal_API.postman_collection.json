@@ -1,0 +1,852 @@
+{
+  "info": {
+    "_postman_id": "job-portal-api-collection",
+    "name": "Job Portal API - Complete Collection",
+    "description": "Comprehensive Postman collection for testing all Job Portal API endpoints including authentication, jobs, users, and applications management.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "🔐 Authentication",
+      "description": "Authentication endpoints for login and registration",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"Password123\",\n  \"role\": \"job_seeker\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Register a new user. Role can be 'job_seeker' or 'employer'"
+          },
+          "response": []
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const jsonData = pm.response.json();",
+                  "  if (jsonData.data && jsonData.data.token) {",
+                  "    pm.environment.set('auth_token', jsonData.data.token);",
+                  "    pm.environment.set('user_id', jsonData.data.user.id);",
+                  "    pm.environment.set('user_email', jsonData.data.user.email);",
+                  "    console.log('✅ Token saved: ' + jsonData.data.token.substring(0, 20) + '...');",
+                  "  }",
+                  "}",
+                  "",
+                  "pm.test('Login Successful', function () {",
+                  "  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "  pm.expect(pm.response.json().success).to.equal(true);",
+                  "  pm.expect(pm.response.json().data.token).to.exist;",
+                  "});",
+                  "",
+                  "pm.test('Response contains user data', function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  pm.expect(jsonData.data.user.id).to.exist;",
+                  "  pm.expect(jsonData.data.user.email).to.exist;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"Password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Login with email and password. Token will be automatically saved to auth_token variable."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "💼 Jobs API",
+      "description": "Job management endpoints (CRUD operations)",
+      "item": [
+        {
+          "name": "Get All Jobs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/jobs",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "jobs"
+              ]
+            },
+            "description": "Retrieve all job listings"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Job by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/jobs/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "jobs",
+                "1"
+              ]
+            },
+            "description": "Retrieve a specific job by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Job",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "  try {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.id) {",
+                  "      pm.environment.set('job_id', jsonData.data.id);",
+                  "      console.log('✅ Job ID saved: ' + jsonData.data.id);",
+                  "    }",
+                  "  } catch (e) {",
+                  "    console.log('Could not parse response');",
+                  "  }",
+                  "}",
+                  "",
+                  "pm.test('Job Created Successfully', function () {",
+                  "  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Senior Software Engineer\",\n  \"company\": \"Tech Corp\",\n  \"location\": \"San Francisco, CA\",\n  \"salary\": \"120000-150000\",\n  \"description\": \"We are looking for an experienced software engineer to join our team. You will work on building scalable applications.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/jobs",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "jobs"
+              ]
+            },
+            "description": "Create a new job listing. Job ID will be automatically saved to job_id variable."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Job",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Senior Software Engineer - Updated\",\n  \"company\": \"Tech Corp Updated\",\n  \"location\": \"San Francisco, CA\",\n  \"salary\": \"130000-160000\",\n  \"description\": \"Updated job description with more details about the role.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/jobs/{{job_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "jobs",
+                "{{job_id}}"
+              ]
+            },
+            "description": "Update an existing job listing by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Job",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/jobs/{{job_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "jobs",
+                "{{job_id}}"
+              ]
+            },
+            "description": "Delete a job listing by ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "👥 Users API",
+      "description": "User management endpoints",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            },
+            "description": "Retrieve all users in the system"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ]
+            },
+            "description": "Retrieve a specific user by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "profile"
+              ]
+            },
+            "description": "Retrieve current logged-in user's profile"
+          },
+          "response": []
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Smith\",\n  \"email\": \"jane@example.com\",\n  \"password\": \"Password123\",\n  \"role\": \"employer\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            },
+            "description": "Create a new user account"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📋 Applications API",
+      "description": "Job application management endpoints",
+      "item": [
+        {
+          "name": "Get All Applications",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/applications",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "applications"
+              ]
+            },
+            "description": "Retrieve all job applications"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Application by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/applications/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "applications",
+                "1"
+              ]
+            },
+            "description": "Retrieve a specific application by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Application Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/applications/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "applications",
+                "status"
+              ]
+            },
+            "description": "Get application status"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Application",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "  try {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.id) {",
+                  "      pm.environment.set('application_id', jsonData.data.id);",
+                  "      console.log('✅ Application ID saved: ' + jsonData.data.id);",
+                  "    }",
+                  "  } catch (e) {",
+                  "    console.log('Could not parse response');",
+                  "  }",
+                  "}",
+                  "",
+                  "pm.test('Application Created Successfully', function () {",
+                  "  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"job_id\": 1,\n  \"applicant_name\": \"John Doe\",\n  \"applicant_email\": \"john@example.com\",\n  \"resume_link\": \"https://example.com/resume/john-doe.pdf\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/applications",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "applications"
+              ]
+            },
+            "description": "Submit a new job application. Application ID will be automatically saved to application_id variable."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🖥️ Web Pages",
+      "description": "View-based routes for web interface",
+      "item": [
+        {
+          "name": "Home Page",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                ""
+              ]
+            },
+            "description": "Render home page"
+          },
+          "response": []
+        },
+        {
+          "name": "Jobs Page",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/jobs",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "jobs"
+              ]
+            },
+            "description": "Render jobs listing page"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Job Page",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/jobs/add",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "jobs",
+                "add"
+              ]
+            },
+            "description": "Render add job form page"
+          },
+          "response": []
+        },
+        {
+          "name": "Job Details Page",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/jobs/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "jobs",
+                "1"
+              ]
+            },
+            "description": "Render job details page"
+          },
+          "response": []
+        },
+        {
+          "name": "About Page",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/about",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "about"
+              ]
+            },
+            "description": "Render about page"
+          },
+          "response": []
+        },
+        {
+          "name": "Contact Page",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/contact",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "contact"
+              ]
+            },
+            "description": "Render contact page"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📝 Test Workflows",
+      "description": "Pre-built test workflows to test multiple endpoints in sequence",
+      "item": [
+        {
+          "name": "Complete Auth & Job Flow",
+          "description": "Test workflow: Register → Login → Create Job → Get All Jobs → Update Job → Delete Job",
+          "item": [
+            {
+              "name": "1. Register New User",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Test User {{$randomInt}}\",\n  \"email\": \"test{{$randomInt}}@example.com\",\n  \"password\": \"TestPassword123\",\n  \"role\": \"employer\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/auth/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "2. Login User",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.response.code === 200) {",
+                      "  const jsonData = pm.response.json();",
+                      "  if (jsonData.data && jsonData.data.token) {",
+                      "    pm.environment.set('auth_token', jsonData.data.token);",
+                      "    console.log('✅ Token saved');",
+                      "  }",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"TestPassword123\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "3. Create Job",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.response.code === 200 || pm.response.code === 201) {",
+                      "  try {",
+                      "    const jsonData = pm.response.json();",
+                      "    if (jsonData.data && jsonData.data.id) {",
+                      "      pm.environment.set('job_id', jsonData.data.id);",
+                      "      console.log('✅ Job ID saved: ' + jsonData.data.id);",
+                      "    }",
+                      "  } catch (e) {",
+                      "    console.log('Response: ' + pm.response.text());",
+                      "  }",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Test Job {{$randomInt}}\",\n  \"company\": \"Test Company\",\n  \"location\": \"Test City\",\n  \"salary\": \"100000\",\n  \"description\": \"This is a test job description\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/jobs",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "jobs"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "4. Get All Jobs",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/jobs",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "jobs"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "5. Get Single Job",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/jobs/{{job_id}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "jobs",
+                    "{{job_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "6. Update Job",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Updated Job Title {{$randomInt}}\",\n  \"company\": \"Updated Company\",\n  \"location\": \"Updated Location\",\n  \"salary\": \"120000\",\n  \"description\": \"Updated job description\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/jobs/{{job_id}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "jobs",
+                    "{{job_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "7. Delete Job",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/jobs/{{job_id}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "jobs",
+                    "{{job_id}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string",
+      "description": "Base URL for the API server. Change this if your server runs on a different port."
+    },
+    {
+      "key": "auth_token",
+      "value": "",
+      "type": "string",
+      "description": "JWT token for authentication. Automatically populated after login."
+    },
+    {
+      "key": "user_id",
+      "value": "",
+      "type": "string",
+      "description": "Current user ID. Automatically populated after login."
+    },
+    {
+      "key": "user_email",
+      "value": "",
+      "type": "string",
+      "description": "Current user email. Automatically populated after login."
+    },
+    {
+      "key": "job_id",
+      "value": "1",
+      "type": "string",
+      "description": "Job ID for testing. Automatically populated after creating a job."
+    },
+    {
+      "key": "application_id",
+      "value": "1",
+      "type": "string",
+      "description": "Application ID for testing. Automatically populated after creating an application."
+    }
+  ]
+}
