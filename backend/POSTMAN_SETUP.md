@@ -1,4 +1,4 @@
-# Job Portal API - Postman Collection Guide
+# Job Portal API - Postman Collection 
 
 ## Overview
 
