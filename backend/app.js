@@ -23,7 +23,8 @@ app.use((req, res, next) => {
   const allowedOrigins = [
     process.env.CLIENT_URL,
     'http://127.0.0.1:5173',
-    'http://localhost:5173',
+    'http://localhost:5173', 
+    'https://job-portal-five-orpin-70.vercel.app/'
   ].filter(Boolean);
 
   const requestOrigin = req.headers.origin;
