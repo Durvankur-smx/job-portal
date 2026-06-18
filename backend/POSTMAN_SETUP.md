@@ -1,16 +1,16 @@
 # Job Portal API - Postman Collection Guide
 
-## 📋 Overview
+## Overview
 
 This Postman collection provides complete testing coverage for the Job Portal API backend. It includes all CRUD operations for Jobs, Users, Applications, and Authentication endpoints.
 
-## 📁 Files Included
+## Files Included
 
 1. **Job_Portal_API.postman_collection.json** - Main collection with all endpoints
 2. **Job_Portal_Environment.postman_environment.json** - Environment variables configuration
 3. **POSTMAN_SETUP.md** - This guide
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Step 1: Import the Collection
 
@@ -39,7 +39,7 @@ This Postman collection provides complete testing coverage for the Job Portal AP
 3. Update `base_url` if your server runs on different port (default: `http://localhost:3000`)
 4. Save
 
-## 📚 API Endpoints Overview
+## API Endpoints Overview
 
 ### Authentication Routes
 - `POST /auth/register` - Register new user
@@ -72,7 +72,7 @@ This Postman collection provides complete testing coverage for the Job Portal AP
 - `GET /jobs/add` - Add job form page
 - `GET /jobs/:id` - Job details page
 
-## 🔑 Authentication Flow
+## Authentication Flow
 
 ### Important: Authentication Setup
 
@@ -98,7 +98,7 @@ The collection uses **JWT Bearer Token** authentication. Here's how it works:
 }
 ```
 
-## 🧪 Testing Workflows
+## Testing Workflows
 
 The collection includes pre-built test workflows:
 
@@ -115,11 +115,11 @@ This workflow tests the entire lifecycle:
 **To run this workflow:**
 1. Navigate to **Test Workflows** folder
 2. Click **Complete Auth & Job Flow** collection
-3. Click the arrow (▶️) next to the collection name
+3. Click the arrow next to the collection name
 4. Select "Run" option
 5. Postman will execute all requests in sequence
 
-## 📊 Variables & Auto-Population
+## Variables & Auto-Population
 
 The collection automatically populates variables after certain requests:
 
@@ -131,7 +131,7 @@ The collection automatically populates variables after certain requests:
 | `job_id` | Create/Update job | Job operations |
 | `application_id` | Create application | Application operations |
 
-## 🔧 Request Body Examples
+## Request Body Examples
 
 ### Register User
 ```json
@@ -164,7 +164,7 @@ The collection automatically populates variables after certain requests:
 }
 ```
 
-## ✅ Test Assertions
+## Test Assertions
 
 Many endpoints include automated test assertions that:
 - ✓ Verify response status codes (200, 201)
@@ -178,7 +178,7 @@ Many endpoints include automated test assertions that:
 3. Click the **Tests** tab in the response pane
 4. You'll see pass/fail results for each assertion
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Issue: "Connection refused" or "Cannot GET /api/jobs"
 **Solution:** Make sure your backend server is running
@@ -207,7 +207,7 @@ Use `/api/jobs` for API testing
 1. Verify your frontend URL is in the allowed origins in `backend/app.js`
 2. Restart the backend server
 
-## 📝 Running Custom Tests
+##  Running Custom Tests
 
 ### Create a Collection Runner Flow
 
@@ -227,7 +227,7 @@ After running a collection, you'll see:
 - Response times
 - Failed test details
 
-## 🔐 Security Notes
+## Security Notes
 
 - **Never commit tokens** to version control
 - Tokens in `auth_token` variable are temporary (stored only in Postman memory)
@@ -235,7 +235,7 @@ After running a collection, you'll see:
 - Use environment files only for development
 - For production: Use separate secure environment file
 
-## 📧 Common Use Cases
+## Common Use Cases
 
 ### Use Case 1: Post a New Job
 1. Login to get auth token
@@ -260,15 +260,15 @@ After running a collection, you'll see:
 3. Set loop delay
 4. Monitor response times in results
 
-## 🎯 Next Steps
+## Next Steps
 
-1. ✅ Import both JSON files into Postman
-2. ✅ Start your backend server (`npm start`)
-3. ✅ Try the **Login User** endpoint first
-4. ✅ Use **Test Workflows** for complete flows
-5. ✅ Refer to endpoint-specific documentation below
+1. Import both JSON files into Postman
+2. Start your backend server (`npm start`)
+3. Try the **Login User** endpoint first
+4. Use **Test Workflows** for complete flows
+5. Refer to endpoint-specific documentation below
 
-## 📖 Detailed Endpoint Documentation
+## Detailed Endpoint Documentation
 
 ### Authentication
 
@@ -390,7 +390,7 @@ After running a collection, you'll see:
 #### GET /applications/status
 **Description:** Get application status information
 
-## 🎓 Tips & Best Practices
+## Tips & Best Practices
 
 1. **Use Variables:** Always use `{{variable_name}}` syntax for dynamic values
 2. **Test Scripts:** Review the Test scripts to understand what's being validated
@@ -400,7 +400,7 @@ After running a collection, you'll see:
 6. **Mock Responses:** Postman can mock responses without hitting the server
 7. **Export Results:** Use Collection Runner to export test results as reports
 
-## 🤝 Support
+## Support
 
 For issues or questions:
 1. Check the Troubleshooting section above
